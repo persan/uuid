@@ -1,0 +1,57 @@
+project UUID is
+
+   Version := "1.0.0";
+   for Languages use ("Ada", "Makefile","gitignore","MD");
+   type BUILD_KIND is ("static", "relocatable");
+   BUILD : BUILD_KIND := external("BUILD", "static");
+
+   for Source_Dirs use (".", "src");
+   for Object_Dir use ".obj/" & project'Name & "/" & BUILD;
+
+
+   for Library_Name use "adauuid";
+   for Library_Dir use  "lib/" & BUILD;
+   for Library_Interface use ("uuid");
+   for Library_Kind use BUILD;
+
+   for Library_Version use "lib" & project'Library_Name & "." & Version &".so";
+
+   package Builder is
+      for Default_Switches ("ada") use ("-k", "-s");
+   end Builder;
+
+   package Compiler is
+
+      for Driver ("MD") use "";
+      for Driver ("Makefile") use "";
+      for Driver ("gitignore") use "";
+
+      for Default_Switches ("ada") use ("-gnatwa",
+                                        "-O2",
+                                        "-gnatf",
+                                        "-gnat12",
+                                        "-fPIC",
+                                        "-fstack-check",
+                                        "-gnato",
+                                        "-fcallgraph-info=su,da",
+                                        "-gnatQ",
+                                        "-ffunction-sections",
+                                        "-fdata-sections");
+   end Compiler;
+
+   package Install is
+      for Active use "True";
+   end Install;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-E");
+   end Binder;
+
+   package Naming is
+      for Implementation_Suffix ("MD") use ".md";
+      for Implementation_Suffix ("gitignore") use ".gitignore";
+      for Implementation_Suffix ("Makefile") use ".mk";
+      for Implementation_Exceptions ("Makefile") use ("Makefile");
+      for Implementation_Exceptions ("gitignore") use (".gitignore");
+   end Naming;
+end UUID;
