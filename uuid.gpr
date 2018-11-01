@@ -1,6 +1,7 @@
 project UUID is
 
    Version := "1.0.0";
+
    for Languages use ("Ada", "Makefile","gitignore","MD");
    type BUILD_KIND is ("static", "relocatable");
    BUILD : BUILD_KIND := external("BUILD", "static");
@@ -25,6 +26,7 @@ project UUID is
       for Driver ("MD") use "";
       for Driver ("Makefile") use "";
       for Driver ("gitignore") use "";
+      for Driver ("sed") use "";
 
       for Default_Switches ("ada") use ("-gnatwa",
                                         "-O2",
@@ -47,8 +49,13 @@ project UUID is
       for Default_Switches ("ada") use ("-E");
    end Binder;
 
+   package Ide is
+      for Vcs_Kind use "Git";
+   end Ide;
+
    package Naming is
       for Implementation_Suffix ("MD") use ".md";
+      for Implementation_Suffix ("sed") use ".sed";
       for Implementation_Suffix ("gitignore") use ".gitignore";
       for Implementation_Suffix ("Makefile") use ".mk";
       for Implementation_Exceptions ("Makefile") use ("Makefile");

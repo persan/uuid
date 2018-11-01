@@ -5,9 +5,9 @@ private with Ada.Finalization;
 
 package UUID is
 
-   type UUID_VARIANT is (NCS, DCE, MICROSOFT, OTHER);
+   type VARIANT_Type is (NCS, DCE, MICROSOFT, OTHER);
 
-   type UUID_TYPE_DCE is (TIME, RANDOM);
+   type TYPE_DCE is (TIME, RANDOM);
 
    type Uuid_Type is tagged private;
 
@@ -47,9 +47,9 @@ package UUID is
 
    -- function time (uu : not null access uuid_type; ret_tv : access bits_time_h.timeval) return time_h.time_t;
 
-   function Gettype (Uu : Uuid_Type) return UUID_TYPE_DCE;
+   function Gettype (Uu : Uuid_Type) return TYPE_DCE;
 
-   function Variant (Uu : Uuid_Type) return UUID_VARIANT;
+   function Variant (Uu : Uuid_Type) return VARIANT_Type;
 
 private
 

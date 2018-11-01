@@ -1,0 +1,23 @@
+with "uuid.gpr";
+
+project UUID.tests is
+
+   type Build_Kind is
+      ("static", "relocatable");
+   for Source_Dirs use ("tests/**");
+   for Main use ("uuid-tests-main.adb");
+   for Object_Dir use ".obj/" & project'Name;
+   for Exec_Dir use "bin";
+   BUILD : Build_Kind := external ("BUILD");
+
+   package Builder renames Uuid.Builder;
+
+   package Compiler renames Uuid.Compiler;
+
+   package Binder renames Uuid.Binder;
+
+   package Ide is
+      for Vcs_Kind use "Git";
+   end Ide;
+
+end UUID.tests;

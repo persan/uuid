@@ -1,29 +1,34 @@
+#!/usr/bin/make gps
 PREFIX?=$(dir $(shell dirname `which gnatls`))
 GPRBUILDFLAGS=-p
 PROJECT=uuid
+DESTDIR=_
 all:
-	echo ${DESTDIR}${PREFIX}
-	gprinstall -d -a -f -p -P ${PROJECT} --build-var=BUILD #-XBUILD=static
-	gprinstall -d -a -f -p -P ${PROJECT} --build-var=BUILD #-XBUILD=relocatable
-#	${MAKE} compile
-#	${MAKE} test
+	${MAKE} clean
+	${MAKE} compile
+	${MAKE} test
 compile:
 	gprbuild ${GPRBUILDFLAGS}  -P ${PROJECT} -XBUILD=static
 	gprbuild ${GPRBUILDFLAGS}  -P ${PROJECT} -XBUILD=relocatable
 
 test:
 	${MAKE} clean
-	gprbuild ${GPRBUILDFLAGS} -p -P ${PROJECT}-tests -XBUILD=static
+	gprbuild ${GPRBUILDFLAGS} -P ${PROJECT}-tests -XBUILD=static
 	./bin/uuid-tests-main
-	${MAKE} clean
-	gprbuild ${GPRBUILDFLAGS} -p -P ${PROJECT}-tests -XBUILD=relocatable
+	rm bin/*
+	gprbuild ${GPRBUILDFLAGS} -P ${PROJECT}-tests -XBUILD=relocatable
 	./bin/uuid-tests-main
 
 install:
-
+	gprinstall -P${PROJECT} -p -f -XBUILD=static --prefix=${DESTDIR}${PREFIX}
+	gprinstall -P${PROJECT} -p -f -XBUILD=relocatable --prefix=${DESTDIR}${PREFIX}
 clean:
-	rm -rf bin .obj lib .gen
+	rm -rf bin .obj lib .gen _
 generate:
 	mkdir .gen
 	cd .gen;echo "#include <uuid/uuid.h>">gen.cpp
 	cd .gen;g++ -c -fdump-ada-spec gen.cpp
+clean:
+	git clean -xdf
+edit:
+	gps -P tests/${PROJECT}-tests&

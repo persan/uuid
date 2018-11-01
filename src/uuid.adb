@@ -179,7 +179,8 @@ package body UUID is
    -- gettype --
    -------------
 
-   function Gettype (Uu : Uuid_Type) return UUID_TYPE_DCE is
+   function Gettype (Uu : Uuid_Type) return
+     TYPE_DCE is
       Temp : constant int := Uuid_Uuid_H.Uuid_Type (Uu.Data (Uu.Data'First)'Unrestricted_Access);
    begin
       case  Temp is
@@ -193,12 +194,12 @@ package body UUID is
    -- variant --
    -------------
 
-   Variant_Map : constant array (UUID_VARIANT_NCS .. UUID_VARIANT_OTHER) of UUID_VARIANT :=
+   Variant_Map : constant array (UUID_VARIANT_NCS .. UUID_VARIANT_OTHER) of VARIANT_Type :=
                    (UUID_VARIANT_NCS => NCS,
                     UUID_VARIANT_DCE => DCE,
                     UUID_VARIANT_MICROSOFT => MICROSOFT,
                     UUID_VARIANT_OTHER => OTHER);
-   function Variant (Uu : Uuid_Type) return UUID_VARIANT is
+   function Variant (Uu : Uuid_Type) return VARIANT_Type is
    begin
       return Variant_Map (Uuid_Uuid_H.Uuid_Variant (Uu.Data (Uu.Data'First)'Unrestricted_Access));
    end Variant;
