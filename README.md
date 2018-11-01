@@ -1,3 +1,2 @@
 lib-Adauuid
-
-Provides a Link to
+Provides an Ada-wrapper to libuuid.
