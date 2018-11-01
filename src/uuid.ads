@@ -23,14 +23,18 @@ package UUID is
 
 
    procedure Generate (Uu : out Uuid_Type);
+   function Generate return Uuid_Type;
 
 
    procedure Generate_Random (Uu : out Uuid_Type);
+   function Generate_Random return Uuid_Type;
 
 
    procedure Generate_Time (Uu : out Uuid_Type);
+   function Generate_Time return Uuid_Type;
 
    procedure Generate_Time_Safe (Uu : out Uuid_Type);
+   function Generate_Time_Safe return Uuid_Type;
 
    function Generate_Time_Safe (Uu : out Uuid_Type) return Boolean;
 

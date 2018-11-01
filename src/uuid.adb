@@ -223,4 +223,32 @@ package body UUID is
       Self.Clear;
    end;
 
+   function Generate return Uuid_Type is
+   begin
+      return Ret : Uuid_Type do
+         Generate (Ret);
+      end return;
+   end;
+
+   function Generate_Random return Uuid_Type is
+   begin
+      return Ret : Uuid_Type do
+         Generate_Random (Ret);
+      end return;
+   end;
+
+   function Generate_Time return Uuid_Type is
+   begin
+      return Ret : Uuid_Type do
+         Generate_Time (Ret);
+      end return;
+   end;
+
+   function Generate_Time_Safe return Uuid_Type is
+   begin
+      return Ret : Uuid_Type do
+         Generate_Time_Safe (Ret);
+      end return;
+   end;
+
 end UUID;
