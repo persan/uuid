@@ -13,7 +13,7 @@ library project UUID is
 
    for Library_Name use "adauuid";
    for Library_Dir use  "lib/" & Library_Type;
-   for Library_Interface use ("uuid");
+   for Library_Interface use ("uuid","uuid.assign","uuid.get");
    for Library_Kind use Library_Type;
 
    for Library_Version use "lib" & project'Library_Name & "." & Version &".so";
