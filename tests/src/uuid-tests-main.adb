@@ -19,15 +19,21 @@ begin
    Ada.Text_IO.Put_Line (U.Image (Upper_Case));
    Ada.Text_IO.Put_Line (U.Image (Lower_Case));
    Ada.Text_IO.New_Line;
+
    for I in 1 .. 10 loop
       U.Generate_Time;
       Ada.Text_IO.Put_Line (U.Image);
    end loop;
+
    Ada.Text_IO.New_Line;
-   U.Generate_Random;
+   for I in 1 .. 10 loop
+      U.Generate_Random;
+      Ada.Text_IO.Put_Line (U.Image);
+   end loop;
+   Ada.Text_IO.New_Line;
 
    for I in 1 .. 10 loop
-      U.Generate_Time_Safe;
+      U.Generate_Time;
       Ada.Text_IO.Put_Line (U.Image & " " &
                               Parse (U.Image).Image & " " & U.Variant'Img &  (if U.Variant = DCE then "/" & U.Gettype'Img else ""));
    end loop;

@@ -122,16 +122,7 @@ package body UUID is
       Uuid_Generate_Time (Uu.Data (Uu.Data'First)'Access);
    end Generate_Time;
 
-   ------------------------
-   -- generate_time_safe --
-   ------------------------
 
-   procedure Generate_Time_Safe (Uu : out Uuid_Type) is
-   begin
-      while not UU.Generate_Time_Safe loop
-         delay 0.0;
-      end loop;
-   end Generate_Time_Safe;
 
    function Generate_Time_Safe (Uu : out Uuid_Type) return Boolean is
    begin
@@ -244,11 +235,5 @@ package body UUID is
       end return;
    end;
 
-   function Generate_Time_Safe return Uuid_Type is
-   begin
-      return Ret : Uuid_Type do
-         Generate_Time_Safe (Ret);
-      end return;
-   end;
 
 end UUID;

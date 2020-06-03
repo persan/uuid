@@ -5,3 +5,6 @@ _
 *-main
 gen.cpp
 .#*#
+Makefile.conf
+makefile.setup
+*-loc.xml

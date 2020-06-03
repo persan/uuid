@@ -33,9 +33,6 @@ package UUID is
    procedure Generate_Time (Uu : out Uuid_Type);
    function Generate_Time return Uuid_Type;
 
-   procedure Generate_Time_Safe (Uu : out Uuid_Type);
-   function Generate_Time_Safe return Uuid_Type;
-
    function Generate_Time_Safe (Uu : out Uuid_Type) return Boolean;
 
    function Is_Null (Uu : out Uuid_Type) return Boolean;
@@ -48,8 +45,7 @@ package UUID is
 
 
    function Image (Uu : Uuid_Type; Mode : Image_Type := Default) return String;
-
-   -- function time (uu : not null access uuid_type; ret_tv : access bits_time_h.timeval) return time_h.time_t;
+   function Value (S : String) return Uuid_Type renames Parse;
 
    function Gettype (Uu : Uuid_Type) return TYPE_DCE;
 

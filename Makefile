@@ -47,14 +47,16 @@
 #                      default is "yes"; has no effect on Windows
 #   UUID_MADVISE : whether MADVISE is supported (yes/no)
 #                      default is "yes"; has no effect on Windows
-
-# helper programs
 CAT := cat
 ECHO  := echo
 WHICH := which
+GPRCONFIG=gprconfig
+GNATLS=gnatls
+-include Makefile.conf
+# helper programs
 
 # check for out-of-tree build
-SOURCE_DIR := $(dir $(MAKEFILE_LIST))
+SOURCE_DIR := $(word 1,$(dir $(MAKEFILE_LIST)))
 ifeq ($(SOURCE_DIR),./)
   RBD=
   UUID_GPR=uuid.gpr
@@ -65,15 +67,14 @@ else
   MAKEPREFIX=$(SOURCE_DIR)/
 endif
 
-TARGET := $(shell gcc -dumpmachine)
-NORMALIZED_TARGET := $(subst normalized_target:,,$(wordlist 6,6,$(shell gprconfig  --config=ada --target=$(TARGET) --mi-show-compilers)))
-ifeq ($(NORMALIZED_TARGET),)
-  $(error No toolchain found for target "$(TARGET)")
-endif
+#TARGET := $(shell gcc -dumpmachine)
+#NORMALIZED_TARGET := $(subst normalized_target:,,$(wordlist 6,6,$(shell ${GPRCONFIG}  --config=ada --target=$(TARGET) --mi-show-compilers)))
+#ifeq ($(NORMALIZED_TARGET),)
+#  $(error No toolchain found for target "$(TARGET)")
+#endif
 
-UUID_OS := $(if $(findstring darwin,$(NORMALIZED_TARGET)),osx,$(if $(findstring windows,$(NORMALIZED_TARGET)),windows,unix))
+#UUID_OS := $(if $(findstring darwin,$(NORMALIZED_TARGET)),osx,$(if $(findstring windows,$(NORMALIZED_TARGET)),windows,unix))
 
-prefix := $(dir $(shell $(WHICH) gnatls))..
 UUID_VERSION := $(shell $(CAT) $(SOURCE_DIR)/version_information)
 
 BUILD         = PROD
@@ -81,13 +82,16 @@ PROCESSORS    = 0
 BUILD_DIR     =
 ENABLE_SHARED = yes
 INTEGRATED    = no
-
+x:
+	@echo $(UUID_GPR)
+	@echo ${SOURCE_DIR}
+	@echo $(MAKEFILE_LIST)
 all: build
 
 # Load current setup if any
 -include makefile.setup
 
-GTARGET=--target=$(NORMALIZED_TARGET)
+#GTARGET=--target=$(NORMALIZED_TARGET)
 
 ifeq ($(ENABLE_SHARED), yes)
    LIBRARY_TYPES=static relocatable static-pic
@@ -95,9 +99,9 @@ else
    LIBRARY_TYPES=static
 endif
 
-ifeq ($(INTEGRATED), yes)
-   integrated_install=/$(NORMALIZED_TARGET)
-endif
+#ifeq ($(INTEGRATED), yes)
+#   integrated_install=/$(NORMALIZED_TARGET)
+#endif
 
 
 GPR_VARS=-XBUILD=$(BUILD)
@@ -107,7 +111,7 @@ GPRBUILD_OPTIONS=
 
 BUILDER=gprbuild -p -m $(GTARGET) $(RBD) -j$(PROCESSORS) $(GPR_VARS) \
 	$(GPRBUILD_OPTIONS)
-INSTALLER=gprinstall -p -f $(GTARGET) $(GPR_VARS) \
+INSTALLER=${GPRINSTALL} -p -f $(GTARGET) $(GPR_VARS) \
 	$(RBD) --sources-subdir=include/uuid --prefix=$(prefix)$(integrated_install)
 CLEANER=gprclean -q $(RBD) $(GTARGET)
 UNINSTALLER=$(INSTALLER) -p -f --install-name=uuid --uninstall
@@ -127,6 +131,7 @@ build-%:
 ###########
 
 uninstall:
+	@echo "$@" ${PATH}
 ifneq (,$(wildcard $(prefix)$(integrated_install)/share/gpr/manifests/uuid))
 	$(UNINSTALLER) $(UUID_GPR)
 endif
@@ -134,6 +139,7 @@ endif
 install: uninstall $(LIBRARY_TYPES:%=install-%)
 
 install-%:
+	@echo "$@" ${PATH}
 	$(INSTALLER) -XLIBRARY_TYPE=$* -XXMLADA_BUILD=$* -XGPR_BUILD=$* \
 		--build-name=$* $(GPR_VARS) \
 		--build-var=LIBRARY_TYPE \
@@ -155,7 +161,7 @@ clean-%:
 
 .SILENT: setup
 
-setup:
+setup:Makefile.conf
 	$(ECHO) "prefix=$(prefix)" > makefile.setup
 	$(ECHO) "ENABLE_SHARED=$(ENABLE_SHARED)" >> makefile.setup
 	$(ECHO) "INTEGRATED=$(INTEGRATED)" >> makefile.setup
@@ -165,6 +171,18 @@ setup:
 	$(ECHO) "SOURCE_DIR=$(SOURCE_DIR)" >> makefile.setup
 	$(ECHO) "UUID_OS=$(UUID_OS)" >> makefile.setup
 	$(ECHO) "UUID_VERSION=$(UUID_VERSION)" >> makefile.setup
+Makefile.conf:Makefile
+	echo "export PATH=${PATH}" >$@
+	echo "export GPRCONFIG=$(shell which gprconfig)" >>$@
+	echo "export GNATLS=$(shell which gnatls)" >>$@
+	echo "export GPRINSTALL=$(shell which gprinstall)" >>$@
+
+	echo "prefix := $(shell dirname $(dir $(shell $(WHICH) gnatls)))" >>$@
+
+clean:
+	git clean -xdf
+test:
+	make -C tests
 
 # Let gprbuild handle parallelisation. In general, we don't support parallel
 # runs in this Makefile, as concurrent gprinstall processes may crash.
