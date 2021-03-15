@@ -1,12 +1,18 @@
 with Ada.Text_IO;
 with UUID.Assign;
 with UUID.Get;
+with GNAT.Traceback.Symbolic;
+with GNAT.Exception_Traces;
+
 
 procedure UUID.Tests.Main is
    U  : Uuid_Type;
    U1 : Uuid_Type;
 
 begin
+   GNAT.Exception_Traces.Trace_On (GNAT.Exception_Traces.Every_Raise);
+   GNAT.Exception_Traces.Set_Trace_Decorator (GNAT.Traceback.Symbolic.Symbolic_Traceback_No_Hex'Access);
+
    Ada.Text_IO.Put_Line (Boolean'Image (U = U1));
    Ada.Text_IO.Put_Line (U.Is_Null'Img);
    Ada.Text_IO.Put_Line (U.Variant'Img);
