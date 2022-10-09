@@ -33,7 +33,6 @@ library project UUID is
                                         "-O2",
                                         "-gnatf",
                                         "-gnat12",
-                                        "-fPIC",
                                         "-fstack-check",
                                         "-gnato",
                                         "-gnatQ",
@@ -44,10 +43,6 @@ library project UUID is
    package Install is
       for Active use "True";
    end Install;
-
-   package Binder is
-      for Default_Switches ("ada") use ("-E");
-   end Binder;
 
    package Ide is
       for Vcs_Kind use "Git";
