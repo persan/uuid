@@ -36,7 +36,6 @@ library project UUID is
                                         "-fPIC",
                                         "-fstack-check",
                                         "-gnato",
-                                        "-fcallgraph-info=su,da",
                                         "-gnatQ",
                                         "-ffunction-sections",
                                         "-fdata-sections");
