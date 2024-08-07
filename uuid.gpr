@@ -27,6 +27,10 @@ library project UUID is
       for Default_Switches ("ada") use ("-k", "-s");
    end Builder;
 
+   package Binder is
+      for Default_Switches ("ada") use ("-E");
+   end Binder;
+
    package Compiler is
 
       for Driver ("MD") use "";

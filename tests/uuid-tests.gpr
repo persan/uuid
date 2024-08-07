@@ -11,7 +11,6 @@ project UUID.tests is
 
    package Compiler renames Uuid.Compiler;
 
-   package Binder renames Uuid.Binder;
 
    package Ide is
       for Vcs_Kind use "Git";

@@ -196,7 +196,7 @@ package body UUID is
    end Variant;
 
    function Image (Uu : Uuid_Type; Mode : Image_Type := Default) return String is
-      R   : aliased Char_Array (1 .. 128) := (others => Interfaces.C.Char'Val (0));
+      R   : aliased char_array := (1 .. 128 => Interfaces.C.Char'Val (0));
       Ret : constant Interfaces.C.Strings.chars_ptr := Interfaces.C.Strings.To_Chars_Ptr (R'Unrestricted_Access);
    begin
       case Mode is
