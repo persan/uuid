@@ -210,11 +210,6 @@ package body UUID is
       return Interfaces.C.Strings.Value (Ret);
    end;
 
-   procedure Initialize (Self : in out Uuid_Type) is
-   begin
-      Self.Clear;
-   end;
-
    function Generate return Uuid_Type is
    begin
       return Ret : Uuid_Type do

@@ -1,7 +1,6 @@
 pragma Ada_2012;
-
 private with Interfaces.C;
-private with Ada.Finalization;
+
 package UUID is
 
 ----------------------------------------------------------------------------------------------
@@ -29,9 +28,15 @@ package UUID is
    --  (there are approximately 10^80 elementary particles in the universe according to Carl Sagan's Cosmos).
    --  The new UUID can reasonably be considered unique among all UUIDs created on the local system,
    --  and among UUIDs created on other systems in the past and in the future.
+   --  -------------------------------------------------------------------------------------------------------
+
+   NULL_UUID : constant Uuid_Type;
+   --  An UUID with the zero-value 00000000-0000-0000-0000-000000000000
+   --  -------------------------------------------------------------------------------------------------------
 
    procedure Clear (Uu : out Uuid_Type);
    --  The clear function sets the value of the supplied uuid variable uu to the NULL value.
+   --  -------------------------------------------------------------------------------------------------------
 
    function "="
      (L : Uuid_Type;
@@ -48,7 +53,7 @@ package UUID is
    --   If it is not available, then uuid_generate will use an alternative algorithm
    --   which uses the current time, the local ethernet MAC address (if available),
    --   and random data generated using a pseudo-random generator.
-   --------------------------------------------------------------------------------------------------
+   --  -------------------------------------------------------------------------------------------------------
 
    procedure Generate_Random (Uu : out Uuid_Type);
    function Generate_Random return Uuid_Type;
@@ -56,7 +61,7 @@ package UUID is
    --   even if a high-quality random number generator (i.e., /dev/urandom) is not available,
    --   in which case a pseudo-random generator will be substituted.
    --   Note that the use of a pseudo-random generator may compromise the uniqueness of UUIDs generated in this fashion.
-   --------------------------------------------------------------------------------------------------
+--  -------------------------------------------------------------------------------------------------------
 
 
    procedure Generate_Time (Uu : out Uuid_Type);
@@ -105,9 +110,9 @@ package UUID is
    --  The case of the hex digits returned by Image may be upper or lower case,
    --  and is dependent on the system-dependent local default.
    --  If the case of the hex digits is important then the Image_Type shall be set acordingly.
+   --  -------------------------------------------------------------------------------------------------------
 
    function Gettype (Uu : Uuid_Type) return TYPE_DCE;
-
 
 
    function Variant (Uu : Uuid_Type) return VARIANT_Type;
@@ -116,11 +121,12 @@ private
 
    use Interfaces.C;
 
-   type Uuid_T is array (0 .. 15) of aliased Unsigned_Char;  -- /usr/include/uuid/uuid.h:44
-   type Uuid_Type is new Ada.Finalization.Controlled with record
+   type Uuid_T is array (0 .. 15) of aliased Unsigned_Char with Default_Component_Value => 0;  -- /usr/include/uuid/uuid.h:44
+   type Uuid_Type is  tagged record
       Data : aliased Uuid_T;
    end record;
-   procedure Initialize (Self : in out Uuid_Type);
+
+   NULL_UUID : constant Uuid_Type := (others => <>);
 
    pragma Linker_Options ("-luuid");
 end UUID;
