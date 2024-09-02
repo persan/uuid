@@ -67,25 +67,14 @@ else
   MAKEPREFIX=$(SOURCE_DIR)/
 endif
 
-#TARGET := $(shell gcc -dumpmachine)
-#NORMALIZED_TARGET := $(subst normalized_target:,,$(wordlist 6,6,$(shell ${GPRCONFIG}  --config=ada --target=$(TARGET) --mi-show-compilers)))
-#ifeq ($(NORMALIZED_TARGET),)
-#  $(error No toolchain found for target "$(TARGET)")
-#endif
 
-#UUID_OS := $(if $(findstring darwin,$(NORMALIZED_TARGET)),osx,$(if $(findstring windows,$(NORMALIZED_TARGET)),windows,unix))
-
-UUID_VERSION := $(shell $(CAT) $(SOURCE_DIR)/version_information)
 
 BUILD         = PROD
 PROCESSORS    = 0
 BUILD_DIR     =
 ENABLE_SHARED = yes
 INTEGRATED    = no
-x:
-	@echo $(UUID_GPR)
-	@echo ${SOURCE_DIR}
-	@echo $(MAKEFILE_LIST)
+
 all: build
 
 # Load current setup if any
@@ -99,9 +88,6 @@ else
    LIBRARY_TYPES=static
 endif
 
-#ifeq ($(INTEGRATED), yes)
-#   integrated_install=/$(NORMALIZED_TARGET)
-#endif
 
 
 GPR_VARS=-XBUILD=$(BUILD)

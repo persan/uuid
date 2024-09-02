@@ -1,7 +1,8 @@
 library project UUID is
 
-   Version := External ("UUID_VERSION", "0.0");
+   Version := "1.1.2";
    Name := "uuid";
+
    for Languages use ("Ada", "Makefile", "gitignore", "MD");
 
 
@@ -17,7 +18,7 @@ library project UUID is
 
    case Library_Type is
       when "relocatable" =>
-         for Library_Version use "lib" & project'Library_Name & "." & Version &".so";
+         for Library_Version use "lib" & project'Library_Name & ".so." & Version;
          for Library_Interface use ("uuid","uuid.assign","uuid.get");
       when others =>
          null;
@@ -41,13 +42,10 @@ library project UUID is
       for Default_Switches ("ada") use ("-gnatwa",
                                         "-O2",
                                         "-gnatf",
-                                        "-gnat12",
+                                        "-gnat2022",
                                         "-fstack-check",
                                         "-fPIC",
-                                        "-gnato",
-                                        "-gnatQ",
-                                        "-ffunction-sections",
-                                        "-fdata-sections");
+                                        "-gnato");
    end Compiler;
 
    package Install is

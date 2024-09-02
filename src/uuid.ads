@@ -2,7 +2,7 @@ pragma Ada_2012;
 private with Interfaces.C;
 
 package UUID is
-
+   VERSION : constant String := "1.1.2";
 ----------------------------------------------------------------------------------------------
 --  Description
 --   The UUID library is used to generate unique identifiers for objects that

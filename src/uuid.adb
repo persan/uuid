@@ -186,17 +186,17 @@ package body UUID is
    -------------
 
    Variant_Map : constant array (UUID_VARIANT_NCS .. UUID_VARIANT_OTHER) of VARIANT_Type :=
-                   (UUID_VARIANT_NCS => NCS,
+                   [UUID_VARIANT_NCS => NCS,
                     UUID_VARIANT_DCE => DCE,
                     UUID_VARIANT_MICROSOFT => MICROSOFT,
-                    UUID_VARIANT_OTHER => OTHER);
+                    UUID_VARIANT_OTHER => OTHER];
    function Variant (Uu : Uuid_Type) return VARIANT_Type is
    begin
       return Variant_Map (Uuid_Uuid_H.Uuid_Variant (Uu.Data (Uu.Data'First)'Unrestricted_Access));
    end Variant;
 
    function Image (Uu : Uuid_Type; Mode : Image_Type := Default) return String is
-      R   : aliased char_array := (1 .. 128 => Interfaces.C.Char'Val (0));
+      R   : aliased Char_Array := [1 .. 128 => Interfaces.C.Char'Val (0)];
       Ret : constant Interfaces.C.Strings.chars_ptr := Interfaces.C.Strings.To_Chars_Ptr (R'Unrestricted_Access);
    begin
       case Mode is
